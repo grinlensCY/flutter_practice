@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
 
 class CounterStorage {
   Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+    // final directory = await getApplicationDocumentsDirectory();
+    final directory = await getExternalStorageDirectory();
     print('get _localPath $directory.path');
 
     return directory.path;
