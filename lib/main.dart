@@ -73,7 +73,7 @@ class CounterStorage {
     final file = await _localFile;
 
     // Write the file
-    return file.writeAsString('$counter');
+    return file.writeAsString('$counter\n',mode:FileMode.append);
   }
 }
 
