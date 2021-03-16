@@ -38,6 +38,97 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class _FlutterDemoState extends State<FlutterDemo> {
+  int _counter_poo = 0;
+  int _counter_asleep = 0;
+  int _counter_pee = 0;
+  int _counter_env = 0;
+  int _counter_specialBreathSnd = 0;
+  var _ts_poo;
+  var _ts_pee;
+  String _tag = '';
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   widget.storage.readCounter().then((int value) {
+  //     setState(() {
+  //       _counter = value;
+  //     });
+  //   });
+  // }
+
+  Future<File> _tagPoo() {
+    setState(() {
+      _counter_poo++;
+      _ts_poo = DateTime.now();
+      _tag = 'poo,$_counter_poo,$_ts_poo';
+      // print(widget.storage.readCounter());
+    });
+
+    // Write the variable as a string to the file.
+    return widget.storage.writeTag(_tag);
+  }
+
+  Future<File> _tagPee() {
+    setState(() {
+      _counter_pee++;
+      _ts_pee = DateTime.now();
+      _tag = 'pee,$_counter_pee,$_ts_pee';
+      // print(widget.storage.readCounter());
+    });
+
+    // Write the variable as a string to the file.
+    return widget.storage.writeTag(_tag);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Reading and Writing Files')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Tag Event...',
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                    onPressed: _tagPoo,
+                    child: Text(
+                      'poo',
+                    )),
+                Text(
+                  '$_counter_poo $_ts_poo',
+                  style: Theme.of(context).textTheme.headline5,
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: _tagPee,
+                  child: Text('pee'),
+                  style: TextButton.styleFrom(primary: Colors.white),
+                ),
+                Text(
+                  '$_counter_pee $_ts_pee',
+                  style: Theme.of(context).textTheme.headline5,
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CounterStorage {
   Future<String> get _localPath async {
     // final directory = await getApplicationDocumentsDirectory();
@@ -69,11 +160,11 @@ class CounterStorage {
     }
   }
 
-  Future<File> writeCounter(int counter) async {
+  Future<File> writeTag(String tag) async {
     final file = await _localFile;
 
     // Write the file
-    return file.writeAsString('$counter\n',mode:FileMode.append);
+    return file.writeAsString('$tag\n',mode:FileMode.append);
   }
 }
 
@@ -84,47 +175,6 @@ class FlutterDemo extends StatefulWidget {
 
   @override
   _FlutterDemoState createState() => _FlutterDemoState();
-}
-
-class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.storage.readCounter().then((int value) {
-      setState(() {
-        _counter = value;
-      });
-    });
-  }
-
-  Future<File> _incrementCounter() {
-    setState(() {
-      _counter++;
-      print(widget.storage.readCounter());
-    });
-
-    // Write the variable as a string to the file.
-    return widget.storage.writeCounter(_counter);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Reading and Writing Files')),
-      body: Center(
-        child: Text(
-          'Button tapped $_counter time${_counter == 1 ? '' : 's'}.',
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
 }
 
 // class MyHomePage extends StatefulWidget {
